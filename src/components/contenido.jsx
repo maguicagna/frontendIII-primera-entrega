@@ -8,7 +8,8 @@ class Contenido extends React.Component{
     constructor(props){
         super(props)
         this.state ={
-            contador : 0,
+            contador : 1,
+            historiaActual: this.buscarHistoriaPorId("1"), 
             seleccionAnterior : "",
             history : [],
 
@@ -17,32 +18,28 @@ class Contenido extends React.Component{
     }
 
     
+
+    buscarHistoriaPorId = (id) => {
+        const historiaActual = data.filter(item => item.id === id);
+        return historiaActual[0];
+
+    }
+
     handleClick(e){
         const seleccion = e.target.id;
-        if (this.state.contador >= 7){
-            alert("FIN");
-        }else if(seleccion === "A" && this.state.seleccionAnterior !== "A"){
-            this.setState({
-                contador : this.state.contador + 1,
-                seleccionAnterior : "A",
-            });
-        } else if(seleccion === "A" && this.state.seleccionAnterior === "A"){
-            this.setState({
-                contador : this.state.contador + 2,
-                seleccionAnterior : "A",
-            });
-        }else if (seleccion === "B" && this.state.seleccionAnterior === "A"){
-            this.setState({
-                contador : this.state.contador + 3,
-                seleccionAnterior : "B",
-            })
-        }else if(seleccion === "B"){
-            this.setState({
-                contador : this.state.contador + 2,
-                seleccionAnterior : "B",
+        //const opcion = 
+        if(this.state.contador === 5){
+            alert("Fin");
+        }else{
+            this.setState( {
+                contador : this.state.contador+1,
+                historiaActual : this.buscarHistoriaPorId(this.state.contador+1+seleccion),
+                seleccionAnterior: seleccion.toUpperCase(),
             })
         }
+
     }
+
 
     componentDidUpdate(prevState){
         if(prevState.contador !== this.state.contador){
@@ -54,9 +51,9 @@ class Contenido extends React.Component{
     render(){
         return(
             <div className="layout">
-                <h2 className="historia">{data[this.state.contador].historia}</h2>
+                <h2 className="historia">{this.state.historiaActual.historia}</h2>
                 <Options 
-                opcion={data[this.state.contador].opciones} 
+                opcion={this.state.historiaActual.opciones} 
                 handleClick={this.handleClick}
                 />
                 <History 
